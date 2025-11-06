@@ -34,10 +34,7 @@ void handle_create(const httplib::Request &req, httplib::Response &res) {
 
 //handling delete
 void handle_delete(const httplib::Request &req, httplib::Response &res) {
-    std::string from_user = req.body;
-    std::istringstream input(from_user);
-    std::string key;
-    std::getline(input, key);
+    std::string key = req.matches[1];
 
     try {
         pqxx::connection conn = get_connection();
@@ -85,7 +82,7 @@ int main() {
     httplib::Server server;
 
     server.Post("/kvstore/create", handle_create);
-    server.Post("/kvstore/delete", handle_delete);
+    server.Delete(R"(/kvstore/(\w+))", handle_delete);
     server.Get(R"(/kvstore/(\w+))", handle_read);
 
     const int num_threads = 20;
