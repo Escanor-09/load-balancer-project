@@ -37,7 +37,7 @@ int main() {
                 continue;
             }
 
-            auto res = client.Post("/kvstore/delete", key, "text/plain");
+            auto res = client.Delete(("/kvstore/" + key).c_str());
             if (res)
                 std::cout << "Server replied: " << res->body << std::endl;
             else
