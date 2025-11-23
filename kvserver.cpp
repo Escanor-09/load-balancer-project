@@ -4,7 +4,7 @@
 #include <sstream>
 #include <pqxx/pqxx>
 
-LRUCache cache(100);
+LRUCache cache(1000);
 
 pqxx::connection get_connection() {
     return pqxx::connection("host=127.0.0.1 port=6432 dbname=kvstore user=postgres password=Escanor09@");
@@ -141,7 +141,7 @@ int main() {
     server.Delete(R"(/kvstore/(\w+))", handle_delete);
     server.Get(R"(/kvstore/(\w+))", handle_read);
 
-    const int num_threads = 20;
+    const int num_threads = 100;
     server.new_task_queue = [num_threads]{return new httplib::ThreadPool(num_threads);};
 
     std::cout << "Server is listening on Port 8080\n";
